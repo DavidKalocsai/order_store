@@ -1,17 +1,19 @@
 package com.pluralsight.controller;
 
 import java.util.List;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import com.pluralsight.model.Id;
 import com.pluralsight.model.Order;
+import com.pluralsight.model.OrderId;
 import com.pluralsight.service.OrderService;
 import com.pluralsight.util.ServiceError;
 
@@ -21,40 +23,30 @@ public class OrderController {
   @Autowired
   private OrderService orderService;
 
-  @RequestMapping("/")
-  public String index() {
-    return "Greetings from Spring Boot!";
-  }
-
-  @RequestMapping(value = "/order", method = RequestMethod.POST)
+  @PostMapping(value = "/order")
   public @ResponseBody Order addOrder(@RequestBody Order order) {
     return orderService.addOrder(order);
   }
 
-  @RequestMapping(value = "/orders", method = RequestMethod.GET)
+  @GetMapping(value = "/orders")
   public @ResponseBody List<Order> getOrders() {
     return orderService.getOrders();
   }
 
-  @RequestMapping(value = "/order", method = RequestMethod.GET)
-  public @ResponseBody Order getOrder(@RequestBody Id id) {
+  @GetMapping(value = "/order")
+  public @ResponseBody Order getOrder(@RequestBody OrderId id) {
     return orderService.getOrder(id);
   }
 
-  @RequestMapping(value = "/order", method = RequestMethod.PUT)
+  @PutMapping(value = "/order")
   public @ResponseBody Order updateRide(@RequestBody Order order) {
     return orderService.updateOrder(order);
   }
 
-  @RequestMapping(value = "/delete", method = RequestMethod.PUT)
-  public @ResponseBody Object delete(@RequestBody Id id) {
+  @PostMapping(value = "/delete")
+  public @ResponseBody Object delete(@Valid @RequestBody OrderId id) {
     orderService.deleteOrder(id);
     return null;
-  }
-
-  @RequestMapping(value = "/test", method = RequestMethod.GET)
-  public @ResponseBody Object test() {
-    throw new IllegalStateException("Cannot connect the database!");
   }
 
   @ExceptionHandler(RuntimeException.class)

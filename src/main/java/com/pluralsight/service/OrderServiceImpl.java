@@ -3,7 +3,7 @@ package com.pluralsight.service;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.pluralsight.model.Id;
+import com.pluralsight.model.OrderId;
 import com.pluralsight.model.Order;
 import com.pluralsight.repository.OrderRepository;
 
@@ -19,7 +19,7 @@ public class OrderServiceImpl implements OrderService {
   }
 
   @Override
-  public Order getOrder(Id id) {
+  public Order getOrder(OrderId id) {
     return orderRepository.getOrder(id);
   }
 
@@ -34,7 +34,7 @@ public class OrderServiceImpl implements OrderService {
   }
 
   @Override
-  public void deleteOrder(Id id) {
+  public void deleteOrder(OrderId id) {
     orderRepository.deleteOrder(id);
   }
 }

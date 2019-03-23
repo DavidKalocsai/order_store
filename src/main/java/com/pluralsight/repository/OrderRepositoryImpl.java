@@ -9,7 +9,7 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import com.pluralsight.model.Id;
+import com.pluralsight.model.OrderId;
 import com.pluralsight.model.Order;
 import com.pluralsight.repository.util.OrderRowMapper;
 
@@ -34,7 +34,7 @@ public class OrderRepositoryImpl implements OrderRepository {
   }
 
   @Override
-  public Order getOrder(final Id id) {
+  public Order getOrder(final OrderId id) {
     final SimpleJdbcCall simpleJdbcCall = new SimpleJdbcCall(dataSource)
         .withProcedureName("get_order").returningResultSet("orders", new OrderRowMapper());
     SqlParameterSource parameters = new MapSqlParameterSource().addValue("id", id.getId())
@@ -67,7 +67,7 @@ public class OrderRepositoryImpl implements OrderRepository {
   }
 
   @Override
-  public void deleteOrder(final Id id) {
+  public void deleteOrder(final OrderId id) {
     final SimpleJdbcCall simpleJdbcCall =
         new SimpleJdbcCall(dataSource).withProcedureName("delete_order");
     final SqlParameterSource parameters = new MapSqlParameterSource().addValue("id", id.getId())

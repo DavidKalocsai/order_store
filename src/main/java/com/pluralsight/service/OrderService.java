@@ -1,7 +1,7 @@
 package com.pluralsight.service;
 
 import java.util.List;
-import com.pluralsight.model.Id;
+import com.pluralsight.model.OrderId;
 import com.pluralsight.model.Order;
 
 public interface OrderService {
@@ -10,9 +10,9 @@ public interface OrderService {
 
   List<Order> getOrders();
 
-  Order getOrder(Id id);
+  Order getOrder(OrderId id);
 
   Order updateOrder(Order order);
 
-  void deleteOrder(Id id);
+  void deleteOrder(OrderId id);
 }
