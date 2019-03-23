@@ -6,11 +6,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import com.pluralsight.model.Id;
 import com.pluralsight.model.Order;
 import com.pluralsight.service.OrderService;
 import com.pluralsight.util.ServiceError;
@@ -26,28 +26,28 @@ public class OrderController {
     return "Greetings from Spring Boot!";
   }
 
-  @RequestMapping(value = "/ride", method = RequestMethod.POST)
+  @RequestMapping(value = "/order", method = RequestMethod.POST)
   public @ResponseBody Order addOrder(@RequestBody Order order) {
     return orderService.addOrder(order);
   }
 
-  @RequestMapping(value = "/rides", method = RequestMethod.GET)
-  public @ResponseBody List<Order> getRides() {
+  @RequestMapping(value = "/orders", method = RequestMethod.GET)
+  public @ResponseBody List<Order> getOrders() {
     return orderService.getOrders();
   }
 
-  @RequestMapping(value = "/ride/{id}", method = RequestMethod.GET)
-  public @ResponseBody Order getRide(@PathVariable(value = "id") Integer id) {
-    return orderService.getOrder(id, "Name 1");
+  @RequestMapping(value = "/order", method = RequestMethod.GET)
+  public @ResponseBody Order getOrder(@RequestBody Id id) {
+    return orderService.getOrder(id);
   }
 
-  @RequestMapping(value = "/ride", method = RequestMethod.PUT)
-  public @ResponseBody Order updateRide(@RequestBody Order ride) {
-    return orderService.updateOrder(ride);
+  @RequestMapping(value = "/order", method = RequestMethod.PUT)
+  public @ResponseBody Order updateRide(@RequestBody Order order) {
+    return orderService.updateOrder(order);
   }
 
-  @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
-  public @ResponseBody Object delete(@PathVariable(value = "id") Integer id) {
+  @RequestMapping(value = "/delete", method = RequestMethod.PUT)
+  public @ResponseBody Object delete(@RequestBody Id id) {
     orderService.deleteOrder(id);
     return null;
   }

@@ -8,9 +8,12 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+import com.pluralsight.model.Id;
 import com.pluralsight.model.Order;
 import com.pluralsight.repository.util.OrderRowMapper;
 
+@Transactional
 @Repository("orderRepository")
 public class OrderRepositoryImpl implements OrderRepository {
 
@@ -19,50 +22,23 @@ public class OrderRepositoryImpl implements OrderRepository {
 
   @Override
   public Order addOrder(final Order order) {
-    // jdbcTemplate.update("insert into ride (name, duration) values (?,?)", ride.getName(),
-    // ride.getDuration());
+    final SimpleJdbcCall simpleJdbcCall =
+        new SimpleJdbcCall(dataSource).withProcedureName("add_order");
+    final SqlParameterSource parameters =
+        new MapSqlParameterSource().addValue("group_name", order.getGroup())
+            .addValue("order_date", order.getDate()).addValue("description", order.getDescription())
+            .addValue("status", order.getStatus() != null ? order.getStatus().getCode() : null);
+    simpleJdbcCall.execute(parameters);
 
-    // KeyHolder keyHolder = new GeneratedKeyHolder();
-    // jdbcTemplate.update(new PreparedStatementCreator() {
-    //
-    // @Override
-    // public PreparedStatement createPreparedStatement(Connection con)
-    // throws SQLException {
-    //
-    // PreparedStatement ps = con.prepareStatement("insert into ride (name, duration) values (?,?)",
-    // new String [] {"id"});
-    // ps.setString(1, ride.getName());
-    // ps.setInt(2, ride.getDuration());
-    // return ps;
-    // }
-    // }, keyHolder);
-    //
-    // Number id = keyHolder.getKey();
-
-    /*
-     * SimpleJdbcInsert insert = new SimpleJdbcInsert(jdbcTemplate);
-     * 
-     * insert.setGeneratedKeyName("id");
-     * 
-     * Map<String, Object> data = new HashMap<>(); data.put("name", ride.getName());
-     * data.put("duration", ride.getDuration());
-     * 
-     * List<String> columns = new ArrayList<>(); columns.add("name"); columns.add("duration");
-     * 
-     * insert.setTableName("ride"); insert.setColumnNames(columns); Number id =
-     * insert.executeAndReturnKey(data);
-     * 
-     * return getOrder(id.intValue());
-     */
-    return order;
+    return null;
   }
 
   @Override
-  public Order getOrder(final Integer id, final String group) {
+  public Order getOrder(final Id id) {
     final SimpleJdbcCall simpleJdbcCall = new SimpleJdbcCall(dataSource)
         .withProcedureName("get_order").returningResultSet("orders", new OrderRowMapper());
-    SqlParameterSource parameters =
-        new MapSqlParameterSource().addValue("id", id).addValue("group_name", group);
+    SqlParameterSource parameters = new MapSqlParameterSource().addValue("id", id.getId())
+        .addValue("group_name", id.getGroup());
     Map<String, Object> out = simpleJdbcCall.execute(parameters);
 
     return ((List<Order>) out.get("orders")).get(0);
@@ -70,38 +46,32 @@ public class OrderRepositoryImpl implements OrderRepository {
 
   @Override
   public List<Order> getOrders() {
+    final SimpleJdbcCall simpleJdbcCall = new SimpleJdbcCall(dataSource)
+        .withProcedureName("get_orders").returningResultSet("orders", new OrderRowMapper());
+    Map<String, Object> out = simpleJdbcCall.execute();
 
-    /*
-     * List<Order> rides = jdbcTemplate.query("select * from ride", new OrderRowMapper());
-     * 
-     * return rides;
-     */
-    return null;
+    return (List<Order>) out.get("orders");
   }
 
   @Override
   public Order updateOrder(Order order) {
-    /*
-     * jdbcTemplate.update("update ride set name = ?, duration = ? where id = ?", ride.getName(),
-     * ride.getDuration(), ride.getId());
-     */
-    return order;
+    final SimpleJdbcCall simpleJdbcCall =
+        new SimpleJdbcCall(dataSource).withProcedureName("update_order");
+    final SqlParameterSource parameters = new MapSqlParameterSource()
+        .addValue("order_id", order.getId()).addValue("group_name", order.getGroup())
+        .addValue("order_date", order.getDate()).addValue("description", order.getDescription())
+        .addValue("status", order.getStatus() != null ? order.getStatus().getCode() : null);
+    simpleJdbcCall.execute(parameters);
+
+    return null;
   }
 
   @Override
-  public void updateOrders(List<Order> orders) {
-    // jdbcTemplate.batchUpdate("update ride set ride_date = ? where id = ?", pairs);
-  }
-
-  @Override
-  public void deleteOrder(Integer id) {
-    // jdbcTemplate.update("delete from ride where id = ?", id);
-    /*
-     * NamedParameterJdbcTemplate namedTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
-     * 
-     * Map<String, Object> paramMap = new HashMap<>(); paramMap.put("id", id);
-     * 
-     * namedTemplate.update("delete from ride where id = :id", paramMap);
-     */
+  public void deleteOrder(final Id id) {
+    final SimpleJdbcCall simpleJdbcCall =
+        new SimpleJdbcCall(dataSource).withProcedureName("delete_order");
+    final SqlParameterSource parameters = new MapSqlParameterSource().addValue("id", id.getId())
+        .addValue("group_name", id.getGroup());
+    simpleJdbcCall.execute(parameters);
   }
 }
