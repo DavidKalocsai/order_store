@@ -1,11 +1,12 @@
-package com.pluralsight.service;
+package com.intland.service;
 
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.pluralsight.model.OrderId;
-import com.pluralsight.model.Order;
-import com.pluralsight.repository.OrderRepository;
+import com.intland.model.Order;
+import com.intland.model.OrderId;
+import com.intland.repository.OrderRepository;
 
 @Service("orderService")
 public class OrderServiceImpl implements OrderService {
@@ -14,12 +15,12 @@ public class OrderServiceImpl implements OrderService {
   private OrderRepository orderRepository;
 
   @Override
-  public Order addOrder(Order ride) {
-    return orderRepository.addOrder(ride);
+  public Optional<Order> addOrder(Order order) {
+    return orderRepository.addOrder(order);
   }
 
   @Override
-  public Order getOrder(OrderId id) {
+  public Optional<Order> getOrder(OrderId id) {
     return orderRepository.getOrder(id);
   }
 
@@ -29,12 +30,12 @@ public class OrderServiceImpl implements OrderService {
   }
 
   @Override
-  public Order updateOrder(Order order) {
+  public Optional<Order> updateOrder(Order order) {
     return orderRepository.updateOrder(order);
   }
 
   @Override
-  public void deleteOrder(OrderId id) {
-    orderRepository.deleteOrder(id);
+  public Optional<Order> deleteOrder(Order order) {
+    return orderRepository.deleteOrder(order);
   }
 }

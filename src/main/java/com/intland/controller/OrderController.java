@@ -1,7 +1,6 @@
-package com.pluralsight.controller;
+package com.intland.controller;
 
 import java.util.List;
-import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,10 +11,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
-import com.pluralsight.model.Order;
-import com.pluralsight.model.OrderId;
-import com.pluralsight.service.OrderService;
-import com.pluralsight.util.ServiceError;
+import com.intland.model.Order;
+import com.intland.model.OrderId;
+import com.intland.service.OrderService;
+import com.intland.util.ServiceError;
 
 @Controller
 public class OrderController {
@@ -25,7 +24,7 @@ public class OrderController {
 
   @PostMapping(value = "/order")
   public @ResponseBody Order addOrder(@RequestBody Order order) {
-    return orderService.addOrder(order);
+    return orderService.addOrder(order).get();
   }
 
   @GetMapping(value = "/orders")
@@ -35,18 +34,17 @@ public class OrderController {
 
   @GetMapping(value = "/order")
   public @ResponseBody Order getOrder(@RequestBody OrderId id) {
-    return orderService.getOrder(id);
+    return orderService.getOrder(id).get();
   }
 
   @PutMapping(value = "/order")
-  public @ResponseBody Order updateRide(@RequestBody Order order) {
-    return orderService.updateOrder(order);
+  public @ResponseBody Order updateOrder(@RequestBody Order order) {
+    return orderService.updateOrder(order).get();
   }
 
   @PostMapping(value = "/delete")
-  public @ResponseBody Object delete(@Valid @RequestBody OrderId id) {
-    orderService.deleteOrder(id);
-    return null;
+  public @ResponseBody Object delete(@RequestBody Order order) {
+    return orderService.deleteOrder(order).get();
   }
 
   @ExceptionHandler(RuntimeException.class)
@@ -54,5 +52,4 @@ public class OrderController {
     ServiceError error = new ServiceError(HttpStatus.OK.value(), ex.getMessage());
     return new ResponseEntity<>(error, HttpStatus.OK);
   }
-
 }

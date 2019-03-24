@@ -1,4 +1,4 @@
-package com.pluralsight.model;
+package com.intland.model;
 
 import java.util.Date;
 import com.google.common.base.MoreObjects;
@@ -10,6 +10,7 @@ public class Order {
   private Date date;
   private String description;
   private OrderStatus status;
+  private Integer version;
 
   public Integer getId() {
     return id;
@@ -51,10 +52,18 @@ public class Order {
     this.status = status;
   }
 
+  public Integer getVersion() {
+    return version;
+  }
+
+  public void setVersion(Integer version) {
+    this.version = version;
+  }
+
   @Override
   public String toString() {
     return MoreObjects.toStringHelper(this).add("Id", id).add("Group", group).add("Date", date)
-        .add("Description", description).add("Status", status).toString();
+        .add("Description", description).add("Status", status).add("Version", version).toString();
   }
 
 
