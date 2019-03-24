@@ -200,17 +200,17 @@ CREATE PROCEDURE order_schema.update_order(
 	IN i_order_id INT,
     IN i_group_name VARCHAR(100),
     IN i_order_date DATE,
-    IN i_desc VARCHAR(200),
-    IN i_status VARCHAR(50),
-    IN i_version INT
+    IN i_order_desc VARCHAR(200),
+    IN i_order_status VARCHAR(50),
+    IN i_order_version INT
 )
 BEGIN
 	DECLARE l_group_id INT;
     DECLARE l_next_version_id INT;
     SET l_group_id = order_schema.get_group_id(i_group_name);
-    SET l_next_version_id = order_schema.get_next_version_id(i_order_id, l_group_id, i_version);
+    SET l_next_version_id = order_schema.get_next_version_id(i_order_id, l_group_id, i_order_version);
     IF (l_group_id IS NOT NULL AND l_next_version_id > 0) THEN
-		UPDATE order_schema.order_table o SET o.order_date = i_order_date, o.order_desc = i_desc, o.order_status = i_status, o.order_version = l_next_version_id WHERE o.order_id = i_order_id AND o.group_id = l_group_id;
+		UPDATE order_schema.order_table o SET o.order_date = i_order_date, o.order_desc = i_order_desc, o.order_status = i_order_status, o.order_version = l_next_version_id WHERE o.order_id = i_order_id AND o.group_id = l_group_id;
         CALL order_schema.get_order(i_order_id, i_group_name);
     END IF;    
 END $$
@@ -226,13 +226,13 @@ DELIMITER $$
 CREATE PROCEDURE order_schema.delete_order(
 	IN i_order_id INT,
     IN i_group_name VARCHAR(100), 
-    IN i_version INT
+    IN i_order_version INT
 )
 BEGIN
 	DECLARE l_group_id INT;
     DECLARE l_next_version_id INT;
     SET l_group_id = order_schema.get_group_id(i_group_name);
-    SET l_next_version_id = order_schema.get_next_version_id(i_order_id, l_group_id, i_version);
+    SET l_next_version_id = order_schema.get_next_version_id(i_order_id, l_group_id, i_order_version);
     IF (l_group_id IS NOT NULL AND l_next_version_id > 0) THEN
 		UPDATE order_schema.order_table o SET o.order_status = 'deleted', o.order_version = l_next_version_id WHERE o.order_id = i_order_id AND o.group_id = l_group_id;
         CALL order_schema.get_order(i_order_id, i_group_name);
