@@ -33,21 +33,21 @@ BEGIN
 	-- Test data - group
 	-- ---------------------------
 	INSERT INTO order_schema.group_table(group_id, group_name)
-	VALUES(1, 'Group 1'); 
+	VALUES(-1, 'Test Group 1'); 
 	INSERT INTO order_schema.group_table(group_id, group_name)
-	VALUES( 2, 'Group 2');
+	VALUES( -2, 'Test Group 2');
 
 	-- ---------------------------
 	-- Test data - order
 	-- ---------------------------
 	INSERT INTO order_schema.order_table(order_id, group_id, order_date, order_desc, order_status)
-	VALUES( 1, 1, CURDATE(), '1,1 ', 'active'); 
+	VALUES( -1, -1, CURDATE(), '1,1 ', 'active'); 
 	INSERT INTO order_schema.order_table(order_id, group_id, order_date, order_desc, order_status)
-	VALUES( 1, 2, CURDATE(), '1,2 ',  'active');
+	VALUES( -1, -2, CURDATE(), '1,2 ',  'active');
 	INSERT INTO order_schema.order_table(order_id, group_id, order_date, order_desc, order_status)
-	VALUES( 2, 1, CURDATE(), '2,1 ',  'active'); 
+	VALUES( -2, -1, CURDATE(), '2,1 ',  'active'); 
 	INSERT INTO order_schema.order_table(order_id, group_id, order_date, order_desc, order_status)
-	VALUES( 2, 2, CURDATE(), '2,2 ',  'active');
+	VALUES( -2, -2, CURDATE(), '2,2 ',  'active');
 END $$
 DELIMITER ;
 GRANT EXECUTE ON PROCEDURE order_schema.add_test_data TO 'test'@'localhost';
