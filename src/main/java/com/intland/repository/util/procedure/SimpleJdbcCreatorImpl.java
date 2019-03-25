@@ -14,35 +14,12 @@ public class SimpleJdbcCreatorImpl implements SimpleJdbcCreator {
   private DataSource dataSource;
 
   @Override
-  public SimpleJdbcCall createSimpleJdbcAddOrder() {
-    return buildSimpleJdbcCall(ProcedureNames.getAddOrder());
-  }
-
-  @Override
-  public SimpleJdbcCall createSimpleJdbcGetOrder() {
-    return buildSimpleJdbcCall(ProcedureNames.getGetOrder());
-  }
-
-  @Override
-  public SimpleJdbcCall createSimpleJdbcGetOrders() {
-    return buildSimpleJdbcCall(ProcedureNames.getGetOrders());
-  }
-
-  @Override
-  public SimpleJdbcCall createSimpleJdbcUpdateOrder() {
-    return buildSimpleJdbcCall(ProcedureNames.getUpdateOrder());
-  }
-
-  @Override
-  public SimpleJdbcCall createSimpleJdbcDeleteOrder() {
-    return buildSimpleJdbcCall(ProcedureNames.getDeleteOrder());
+  public SimpleJdbcCall createSimpleJdbc(final String procedureName) {
+    return buildSimpleJdbcCall(procedureName);
   }
 
   private SimpleJdbcCall buildSimpleJdbcCall(final String procedureName) {
     return new SimpleJdbcCall(dataSource).withProcedureName(procedureName)
         .returningResultSet(ProcedureNames.getResultSetKey(), new OrderRowMapper());
   }
-
-
-
 }

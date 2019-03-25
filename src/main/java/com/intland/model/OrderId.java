@@ -5,7 +5,6 @@ import com.google.common.base.MoreObjects;
 public class OrderId {
 
   private Integer id;
-
   private String group;
 
   public Integer getId() {
