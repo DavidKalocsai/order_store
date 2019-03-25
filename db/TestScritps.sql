@@ -50,7 +50,7 @@ BEGIN
 	VALUES( 2, 2, CURDATE(), '2,2 ',  'active');
 END $$
 DELIMITER ;
-
+GRANT EXECUTE ON PROCEDURE order_schema.add_test_data TO 'test'@'localhost';
 -- ---------------------------
 -- Test procedures
 -- ---------------------------

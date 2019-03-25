@@ -2,8 +2,9 @@
 -- USER
 -- ---------------------------
 DROP USER IF EXISTS 'app'@'localhost';
+DROP USER IF EXISTS 'test'@'localhost';
 CREATE USER IF NOT EXISTS 'app'@'localhost' IDENTIFIED BY 'app';
-
+CREATE USER IF NOT EXISTS 'test'@'localhost' IDENTIFIED BY 'test';
 -- ---------------------------
 -- Schema
 -- ---------------------------
@@ -161,6 +162,7 @@ END $$
 DELIMITER ;
 
 GRANT EXECUTE ON PROCEDURE order_schema.add_order TO 'app'@'localhost';
+GRANT EXECUTE ON PROCEDURE order_schema.add_order TO 'test'@'localhost';
 
 -- ---------------------------
 -- Procedure - get order
@@ -177,6 +179,7 @@ END $$
 DELIMITER ;
 
 GRANT EXECUTE ON PROCEDURE order_schema.get_order TO 'app'@'localhost';
+GRANT EXECUTE ON PROCEDURE order_schema.get_order TO 'test'@'localhost';
 
 -- ---------------------------
 -- Procedure - get orders
@@ -190,7 +193,7 @@ END $$
 DELIMITER ;
 
 GRANT EXECUTE ON PROCEDURE order_schema.get_orders TO 'app'@'localhost';
-
+GRANT EXECUTE ON PROCEDURE order_schema.get_orders TO 'test'@'localhost';
 -- ---------------------------
 -- Procedure - update order
 -- --------------------------
@@ -217,7 +220,7 @@ END $$
 DELIMITER ;
 
 GRANT EXECUTE ON PROCEDURE order_schema.update_order TO 'app'@'localhost';
-
+GRANT EXECUTE ON PROCEDURE order_schema.update_order TO 'test'@'localhost';
 -- ---------------------------
 -- Procedure - delete order
 -- --------------------------
@@ -241,4 +244,4 @@ END $$
 DELIMITER ;
 
 GRANT EXECUTE ON PROCEDURE order_schema.delete_order TO 'app'@'localhost';
-
+GRANT EXECUTE ON PROCEDURE order_schema.delete_order TO 'test'@'localhost';
