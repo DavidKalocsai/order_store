@@ -75,7 +75,7 @@ CREATE FUNCTION order_schema.get_next_group_id()
 RETURNS INT READS SQL DATA
 BEGIN
 	DECLARE l_group_id INT;
-    SET l_group_id = (SELECT MAX(group_id) + 1 FROM order_schema.group_table g);
+    SET l_group_id = (SELECT MAX(group_id) + 1 FROM order_schema.group_table g FOR UPDATE);
 	RETURN (l_group_id);
 END$$
 DELIMITER ;
@@ -95,7 +95,7 @@ RETURNS INT READS SQL DATA
 BEGIN
 	DECLARE l_version INT;
     DECLARE ret_valid INT;
-    SET l_version = (SELECT order_version FROM order_schema.order_table o WHERE o.order_id = i_order_id AND o.group_id = i_group_id);
+    SET l_version = (SELECT order_version FROM order_schema.order_table o WHERE o.order_id = i_order_id AND o.group_id = i_group_id FOR UPDATE);
     if (i_version = l_version) THEN
 		SET ret_valid = l_version + 1;
     ELSE
