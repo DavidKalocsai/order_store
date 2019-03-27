@@ -10,9 +10,9 @@ CREATE TABLE IF NOT EXISTS order_schema.test_data (
 -- ---------------------------
 -- Proceduer - add test result
 -- ---------------------------
-DROP PROCEDURE IF EXISTS order_schema.add_test_result;
+DROP PROCEDURE IF EXISTS order_schema.test_add_result;
 DELIMITER $$
-CREATE PROCEDURE order_schema.add_test_result(
+CREATE PROCEDURE order_schema.test_add_result(
 	in i_test_name VARCHAR(100),
     in i_test_result INT
 )
@@ -25,9 +25,9 @@ DELIMITER ;
 -- ---------------------------
 -- Proceduer - add test data to tables
 -- ---------------------------
-DROP PROCEDURE IF EXISTS order_schema.add_test_data;
+DROP PROCEDURE IF EXISTS order_schema.test_add_data;
 DELIMITER $$
-CREATE PROCEDURE order_schema.add_test_data()
+CREATE PROCEDURE order_schema.test_add_data()
 BEGIN
 	-- ---------------------------
 	-- Test data - group
@@ -50,7 +50,7 @@ BEGIN
 	VALUES( -2, -2, CURDATE(), '2,2 ',  'active');
 END $$
 DELIMITER ;
-GRANT EXECUTE ON PROCEDURE order_schema.add_test_data TO 'test'@'localhost';
+GRANT EXECUTE ON PROCEDURE order_schema.test_add_data TO 'test'@'localhost';
 -- ---------------------------
 -- Test procedures
 -- ---------------------------

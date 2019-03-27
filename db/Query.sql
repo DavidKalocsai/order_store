@@ -76,8 +76,9 @@ CREATE FUNCTION order_schema.get_next_group_id()
 RETURNS INT READS SQL DATA
 BEGIN
 	DECLARE l_group_id INT;
-    SET l_group_id = (SELECT MAX(group_id) + 1 FROM order_schema.group_table g FOR UPDATE);
-	RETURN (l_group_id);
+    SET l_group_id = (SELECT MAX(group_id) FROM order_schema.group_table g FOR UPDATE);
+    IF (l_group_id IS NULL) THEN SET l_group_id = 0; END IF;   
+    RETURN (l_group_id + 1);
 END$$
 DELIMITER ;
 
@@ -245,3 +246,5 @@ DELIMITER ;
 
 GRANT EXECUTE ON PROCEDURE order_schema.delete_order TO 'app'@'localhost';
 GRANT EXECUTE ON PROCEDURE order_schema.delete_order TO 'test'@'localhost';
+
+SELECT g.group_id FROM order_schema.group_table g WHERE g.group_name = 'name';
