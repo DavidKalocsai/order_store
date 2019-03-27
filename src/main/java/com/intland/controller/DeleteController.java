@@ -1,8 +1,5 @@
 package com.intland.controller;
 
-import com.intland.controller.util.validation.ControllerInputValidator;
-import com.intland.model.OrderDbObj;
-import com.intland.service.OrderService;
 import javax.validation.Valid;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,7 +9,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
+import com.intland.controller.util.validation.ControllerInputValidator;
+import com.intland.model.OrderDbObj;
+import com.intland.service.OrderService;
 
+/**
+ * Controller handles order delete requests.
+ */
 @Controller
 public class DeleteController extends ControllerExceptionHandler {
 
@@ -24,6 +27,14 @@ public class DeleteController extends ControllerExceptionHandler {
   @Autowired
   private ControllerInputValidator validator;
 
+  /**
+   * Delete an order from the database. It does not delete a request, it just set it to inactive.
+   *
+   * @param order {@link OrderDbObj}.
+   * @param bindingResult in case of validation issue, it stores the error results, messages.
+   * @return After successful add, order will be extended with Id and Version. In case of failures
+   *         base class {@link ControllerExceptionHandler} will generate the response.
+   */
   @PutMapping(value = "/delete")
   public @ResponseBody OrderDbObj delete(@Valid @RequestBody OrderDbObj order,
       final BindingResult bindingResult) {

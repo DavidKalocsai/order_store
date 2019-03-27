@@ -1,8 +1,5 @@
 package com.intland.controller;
 
-import com.intland.controller.util.validation.ControllerInputValidator;
-import com.intland.model.OrderDbObj;
-import com.intland.service.OrderService;
 import javax.validation.Valid;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,7 +9,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
+import com.intland.controller.util.validation.ControllerInputValidator;
+import com.intland.model.OrderDbObj;
+import com.intland.service.OrderService;
 
+/**
+ * Controller handles update order requests.
+ */
 @Controller
 public class UpdateController extends ControllerExceptionHandler {
 
@@ -24,6 +27,14 @@ public class UpdateController extends ControllerExceptionHandler {
   @Autowired
   private ControllerInputValidator validator;
 
+  /**
+   * Update order in database.
+   *
+   * @param order {@link OrderDbObj}.
+   * @param bindingResult in case of validation issue, it stores the error results, messages.
+   * @return After successful update, order will be updated with the new values. In case of failures
+   *         base class {@link ControllerExceptionHandler} will generate the response.
+   */
   @PutMapping(value = "/update")
   public @ResponseBody OrderDbObj updateOrder(@Valid @RequestBody OrderDbObj order,
       final BindingResult bindingResult) {
