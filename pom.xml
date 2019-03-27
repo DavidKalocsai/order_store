@@ -8,9 +8,6 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>order_store Maven Webapp</name>
 	<url>http://maven.apache.org</url>
-	<properties>
-    	<mavenVersion>2.1</mavenVersion>
-  	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
