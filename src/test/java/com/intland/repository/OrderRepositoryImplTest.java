@@ -16,13 +16,12 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 import com.intland.model.Order;
+import com.intland.model.OrderDbObj;
 import com.intland.model.OrderId;
 import com.intland.model.OrderStatus;
-import com.intland.model.OrderDbObj;
 
 /**
- * Testing {@link OrderRepositoryImpl}
- *
+ * Testing {@link OrderRepositoryImpl}.
  */
 @Transactional
 @RunWith(SpringJUnit4ClassRunner.class)
