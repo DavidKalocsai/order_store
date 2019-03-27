@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.intland.model.Order;
-import com.intland.model.OrderWithId;
+import com.intland.model.OrderDbObj;
 import com.intland.service.OrderService;
 
 @Controller
@@ -20,7 +20,7 @@ public class AddController extends ControllerExceptionHandler {
   private OrderService orderService;
 
   @PostMapping(value = "/add")
-  public @ResponseBody OrderWithId addOrder(@RequestBody Order order) {
+  public @ResponseBody OrderDbObj addOrder(@RequestBody Order order) {
     LOG.info("Add called: {}", order);
     return orderService.addOrder(order).orElse(null);
   }

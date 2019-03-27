@@ -5,7 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
-import com.intland.model.OrderWithId;
+import com.intland.model.OrderDbObj;
 import com.intland.service.OrderService;
 
 @Controller
@@ -15,7 +15,7 @@ public class UpdateController extends ControllerExceptionHandler {
   private OrderService orderService;
 
   @PutMapping(value = "/update")
-  public @ResponseBody OrderWithId updateOrder(@RequestBody OrderWithId order) {
+  public @ResponseBody OrderDbObj updateOrder(@RequestBody OrderDbObj order) {
     return orderService.updateOrder(order).orElse(null);
   }
 }

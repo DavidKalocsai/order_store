@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.intland.model.Order;
 import com.intland.model.OrderId;
 import com.intland.model.OrderStatus;
-import com.intland.model.OrderWithId;
+import com.intland.model.OrderDbObj;
 
 /**
  * Testing {@link OrderRepositoryImpl}
@@ -49,7 +49,7 @@ public class OrderRepositoryImplTest {
   public void addOrderShouldReturnThePassedInOrderWithOrderId() {
     final Order order = createAddOrder();
 
-    final OrderWithId retOrder = orderRepository.addOrder(order).get();
+    final OrderDbObj retOrder = orderRepository.addOrder(order).get();
 
     validateOrder(order, retOrder);
     Assert.assertThat(1, is(equalTo(retOrder.getId())));
@@ -60,9 +60,9 @@ public class OrderRepositoryImplTest {
   public void getOrderShouldReturnNewlyAddedOrder() {
     final Order order = createAddOrder();
 
-    final OrderWithId expectedOrder = orderRepository.addOrder(order).get();
+    final OrderDbObj expectedOrder = orderRepository.addOrder(order).get();
     final OrderId orderId = createOrderId(expectedOrder);
-    final OrderWithId actualOrder = orderRepository.getOrder(orderId).get();
+    final OrderDbObj actualOrder = orderRepository.getOrder(orderId).get();
 
     validateOrder(expectedOrder, actualOrder);
     Assert.assertThat(1, is(equalTo(actualOrder.getId())));
@@ -73,8 +73,8 @@ public class OrderRepositoryImplTest {
   public void updateShouldUpdateNewlyAddedOrder() {
     final Order order = createAddOrder();
 
-    final OrderWithId expectedOrder = orderRepository.addOrder(order).get();
-    final OrderWithId actualOrder = orderRepository.updateOrder(expectedOrder).get();
+    final OrderDbObj expectedOrder = orderRepository.addOrder(order).get();
+    final OrderDbObj actualOrder = orderRepository.updateOrder(expectedOrder).get();
 
     validateOrder(expectedOrder, actualOrder);
     Assert.assertThat(1, is(equalTo(actualOrder.getId())));
@@ -83,8 +83,8 @@ public class OrderRepositoryImplTest {
 
   @Test
   public void getOrdersShouldReturnEveryTestOrderWhenRequested() {
-    final List<OrderWithId> orders = orderRepository.getOrders();
-    final List<OrderWithId> testData =
+    final List<OrderDbObj> orders = orderRepository.getOrders();
+    final List<OrderDbObj> testData =
         orders.stream().filter(x -> x.getId() < 0).collect(Collectors.toList());
     Assert.assertThat(ORDERS_SIZE, is(equalTo(testData.size())));
   }
@@ -104,14 +104,14 @@ public class OrderRepositoryImplTest {
     return order;
   }
 
-  private OrderId createOrderId(final OrderWithId order) {
+  private OrderId createOrderId(final OrderDbObj order) {
     final OrderId orderId = new OrderId();
     orderId.setId(order.getId());
     orderId.setGroup(order.getGroup());
     return orderId;
   }
 
-  private void validateOrder(final Order expectedOrder, final OrderWithId actualOrder) {
+  private void validateOrder(final Order expectedOrder, final OrderDbObj actualOrder) {
     Assert.assertThat(expectedOrder.getDate(), is(equalTo(actualOrder.getDate())));
     Assert.assertThat(expectedOrder.getGroup(), is(equalTo(actualOrder.getGroup())));
     Assert.assertThat(expectedOrder.getDescription(), is(equalTo(actualOrder.getDescription())));

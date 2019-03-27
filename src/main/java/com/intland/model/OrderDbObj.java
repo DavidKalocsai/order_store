@@ -2,7 +2,7 @@ package com.intland.model;
 
 import com.google.common.base.MoreObjects;
 
-public class OrderWithId extends Order {
+public class OrderDbObj extends Order {
 
   private Integer id;
   private Integer version;

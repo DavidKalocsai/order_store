@@ -5,7 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
-import com.intland.model.OrderWithId;
+import com.intland.model.OrderDbObj;
 import com.intland.service.OrderService;
 
 @Controller
@@ -15,7 +15,7 @@ public class DeleteController extends ControllerExceptionHandler {
   private OrderService orderService;
 
   @PutMapping(value = "/delete")
-  public @ResponseBody OrderWithId delete(@RequestBody OrderWithId order) {
+  public @ResponseBody OrderDbObj delete(@RequestBody OrderDbObj order) {
     return orderService.deleteOrder(order).orElse(null);
   }
 
