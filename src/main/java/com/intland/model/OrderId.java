@@ -1,10 +1,14 @@
 package com.intland.model;
 
+import javax.validation.constraints.Min;
 import com.google.common.base.MoreObjects;
 
 public class OrderId {
 
+  @Min(value = 1, message = "{id.id.invalid}")
   private Integer id;
+
+  @Min(value = 1, message = "{id.group.invalid=Group is invalid}")
   private String group;
 
   public Integer getId() {
@@ -28,7 +32,4 @@ public class OrderId {
   public String toString() {
     return MoreObjects.toStringHelper(this).add("Id", id).add("Group", group).toString();
   }
-
-
-
 }
