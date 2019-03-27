@@ -1,4 +1,4 @@
-package com.intland.controller.validation;
+package com.intland.controller.util.validation;
 
 import org.springframework.validation.BindingResult;
 

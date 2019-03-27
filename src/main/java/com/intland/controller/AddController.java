@@ -9,7 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
-import com.intland.controller.validation.ControllerInputValidator;
+import com.intland.controller.util.validation.ControllerInputValidator;
 import com.intland.model.Order;
 import com.intland.model.OrderDbObj;
 import com.intland.service.OrderService;
