@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.intland.model.Order;
 import com.intland.model.OrderId;
 import com.intland.model.OrderStatus;
+import com.intland.model.OrderWithId;
 
 /**
  * Testing {@link OrderRepositoryImpl}
@@ -28,7 +29,6 @@ import com.intland.model.OrderStatus;
 @ContextConfiguration("/test-jdbc-config.xml")
 public class OrderRepositoryImplTest {
   private static final int ORDERS_SIZE = 4;
-  private static final int ORDER_ID = 1;
   private static final String ORDER_GROUP = "qlpyurmyu4228492mmnprgvma";
   private static final OrderStatus ORDER_STATUS = OrderStatus.ACTIVE;
   private static final Date ORDER_DATE = new Date(2019, 8, 21);
@@ -49,7 +49,7 @@ public class OrderRepositoryImplTest {
   public void addOrderShouldReturnThePassedInOrderWithOrderId() {
     final Order order = createAddOrder();
 
-    Order retOrder = orderRepository.addOrder(order).get();
+    final OrderWithId retOrder = orderRepository.addOrder(order).get();
 
     validateOrder(order, retOrder);
     Assert.assertThat(1, is(equalTo(retOrder.getId())));
@@ -60,9 +60,9 @@ public class OrderRepositoryImplTest {
   public void getOrderShouldReturnNewlyAddedOrder() {
     final Order order = createAddOrder();
 
-    final Order expectedOrder = orderRepository.addOrder(order).get();
+    final OrderWithId expectedOrder = orderRepository.addOrder(order).get();
     final OrderId orderId = createOrderId(expectedOrder);
-    final Order actualOrder = orderRepository.getOrder(orderId).get();
+    final OrderWithId actualOrder = orderRepository.getOrder(orderId).get();
 
     validateOrder(expectedOrder, actualOrder);
     Assert.assertThat(1, is(equalTo(actualOrder.getId())));
@@ -73,8 +73,8 @@ public class OrderRepositoryImplTest {
   public void updateShouldUpdateNewlyAddedOrder() {
     final Order order = createAddOrder();
 
-    final Order expectedOrder = orderRepository.addOrder(order).get();
-    final Order actualOrder = orderRepository.updateOrder(expectedOrder).get();
+    final OrderWithId expectedOrder = orderRepository.addOrder(order).get();
+    final OrderWithId actualOrder = orderRepository.updateOrder(expectedOrder).get();
 
     validateOrder(expectedOrder, actualOrder);
     Assert.assertThat(1, is(equalTo(actualOrder.getId())));
@@ -83,20 +83,20 @@ public class OrderRepositoryImplTest {
 
   @Test
   public void getOrdersShouldReturnEveryTestOrderWhenRequested() {
-    List<Order> orders = orderRepository.getOrders();
-    List<Order> testData = orders.stream().filter(x -> x.getId() < 0).collect(Collectors.toList());
+    final List<OrderWithId> orders = orderRepository.getOrders();
+    final List<OrderWithId> testData =
+        orders.stream().filter(x -> x.getId() < 0).collect(Collectors.toList());
     Assert.assertThat(ORDERS_SIZE, is(equalTo(testData.size())));
   }
 
   private void addTestData() {
     final SimpleJdbcCall simpleJdbcCall =
-        new SimpleJdbcCall(dataSource).withProcedureName("add_test_data");
+        new SimpleJdbcCall(dataSource).withProcedureName("test_add_data");
     simpleJdbcCall.execute();
   }
 
   private Order createAddOrder() {
     final Order order = new Order();
-    order.setId(ORDER_ID);
     order.setGroup(ORDER_GROUP);
     order.setDate(ORDER_DATE);
     order.setDescription(ORDER_DESCRIPTION);
@@ -104,14 +104,14 @@ public class OrderRepositoryImplTest {
     return order;
   }
 
-  private OrderId createOrderId(final Order order) {
+  private OrderId createOrderId(final OrderWithId order) {
     final OrderId orderId = new OrderId();
     orderId.setId(order.getId());
     orderId.setGroup(order.getGroup());
     return orderId;
   }
 
-  private void validateOrder(final Order expectedOrder, final Order actualOrder) {
+  private void validateOrder(final Order expectedOrder, final OrderWithId actualOrder) {
     Assert.assertThat(expectedOrder.getDate(), is(equalTo(actualOrder.getDate())));
     Assert.assertThat(expectedOrder.getGroup(), is(equalTo(actualOrder.getGroup())));
     Assert.assertThat(expectedOrder.getDescription(), is(equalTo(actualOrder.getDescription())));

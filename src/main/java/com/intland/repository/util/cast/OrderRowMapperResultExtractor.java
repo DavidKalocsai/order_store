@@ -3,13 +3,13 @@ package com.intland.repository.util.cast;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import com.intland.model.Order;
+import com.intland.model.OrderWithId;
 
 
 public interface OrderRowMapperResultExtractor {
 
-  Optional<Order> extractOrder(Map<String, Object> rowMappedResult);
+  Optional<OrderWithId> extractOrder(Map<String, Object> rowMappedResult);
 
-  List<Order> extractOrders(Map<String, Object> rowMappedResult);
+  List<OrderWithId> extractOrders(Map<String, Object> rowMappedResult);
 
 }

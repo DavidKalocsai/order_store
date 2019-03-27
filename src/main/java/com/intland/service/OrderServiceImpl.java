@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.intland.model.Order;
 import com.intland.model.OrderId;
+import com.intland.model.OrderWithId;
 import com.intland.repository.OrderRepository;
 
 @Service("orderService")
@@ -15,27 +16,27 @@ public class OrderServiceImpl implements OrderService {
   private OrderRepository orderRepository;
 
   @Override
-  public Optional<Order> addOrder(Order order) {
+  public Optional<OrderWithId> addOrder(Order order) {
     return orderRepository.addOrder(order);
   }
 
   @Override
-  public Optional<Order> getOrder(OrderId id) {
+  public Optional<OrderWithId> getOrder(OrderId id) {
     return orderRepository.getOrder(id);
   }
 
   @Override
-  public List<Order> getOrders() {
+  public List<OrderWithId> getOrders() {
     return orderRepository.getOrders();
   }
 
   @Override
-  public Optional<Order> updateOrder(Order order) {
+  public Optional<OrderWithId> updateOrder(OrderWithId order) {
     return orderRepository.updateOrder(order);
   }
 
   @Override
-  public Optional<Order> deleteOrder(Order order) {
+  public Optional<OrderWithId> deleteOrder(OrderWithId order) {
     return orderRepository.deleteOrder(order);
   }
 }

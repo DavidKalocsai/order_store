@@ -4,17 +4,18 @@ import java.util.List;
 import java.util.Optional;
 import com.intland.model.Order;
 import com.intland.model.OrderId;
+import com.intland.model.OrderWithId;
 
 public interface OrderRepository {
 
-  Optional<Order> addOrder(Order ride);
+  Optional<OrderWithId> addOrder(Order ride);
 
-  Optional<Order> updateOrder(Order order);
+  Optional<OrderWithId> updateOrder(OrderWithId order);
 
-  Optional<Order> deleteOrder(Order order);
+  Optional<OrderWithId> deleteOrder(OrderWithId order);
 
-  Optional<Order> getOrder(OrderId id);
+  Optional<OrderWithId> getOrder(OrderId id);
 
-  List<Order> getOrders();
+  List<OrderWithId> getOrders();
 
 }

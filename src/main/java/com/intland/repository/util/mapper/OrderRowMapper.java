@@ -5,14 +5,15 @@ import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 import com.intland.model.Order;
 import com.intland.model.OrderStatus;
+import com.intland.model.OrderWithId;
 import com.intland.repository.util.names.GroupTablePropertyNames;
 import com.intland.repository.util.names.OrderTablePropertyNames;
 
 public class OrderRowMapper implements RowMapper<Order> {
 
   @Override
-  public Order mapRow(ResultSet rs, int rowNum) throws SQLException {
-    Order order = new Order();
+  public OrderWithId mapRow(ResultSet rs, int rowNum) throws SQLException {
+    OrderWithId order = new OrderWithId();
     order.setId(rs.getInt(OrderTablePropertyNames.getId()));
     order.setGroup(rs.getString(GroupTablePropertyNames.getGroupName()));
     order.setDate(rs.getDate(OrderTablePropertyNames.getOrderDate()));
