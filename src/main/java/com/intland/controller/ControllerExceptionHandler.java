@@ -6,7 +6,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import com.intland.util.ServiceError;
+import com.intland.controller.util.error.ServiceError;
 
 public abstract class ControllerExceptionHandler {
   private static final Logger LOG = LogManager.getLogger(ControllerExceptionHandler.class);
