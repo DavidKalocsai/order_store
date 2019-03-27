@@ -8,6 +8,9 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>order_store Maven Webapp</name>
 	<url>http://maven.apache.org</url>
+	<properties>
+    	<mavenVersion>2.1</mavenVersion>
+  	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -58,11 +61,6 @@
 			<version>8.0.13</version>
 		</dependency>
 		<dependency>
-			<groupId>joda-time</groupId>
-			<artifactId>joda-time</artifactId>
-			<version>2.9.9</version>
-		</dependency>
-		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 			<version>27.0.1-jre</version>
@@ -77,7 +75,6 @@
 			<artifactId>hibernate-validator</artifactId>
 			<version>6.0.13.Final</version>
 		</dependency>
-		<!-- Verify validation annotations usage at compile time -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator-annotation-processor</artifactId>
