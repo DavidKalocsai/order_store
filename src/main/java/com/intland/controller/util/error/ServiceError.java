@@ -1,9 +1,13 @@
 package com.intland.controller.util.error;
 
+/**
+ * Transfers errors from back end to UI.
+ */
 public class ServiceError {
   private int code;
 
   private String message;
+
 
   public ServiceError() {
 
