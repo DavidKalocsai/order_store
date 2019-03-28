@@ -1,5 +1,8 @@
 package com.intland.repository.util.names;
 
+/**
+ * Domain object to store names of group table properties.
+ */
 public class GroupTablePropertyNames {
   private static final String TABLE_NAME = "group_table";
   private static final String ID = "group_id";

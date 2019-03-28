@@ -10,6 +10,10 @@ import com.intland.model.OrderStatus;
 import com.intland.repository.util.names.GroupTablePropertyNames;
 import com.intland.repository.util.names.OrderTablePropertyNames;
 
+/**
+ * Map ResultSet to OrderDbObj.
+ *
+ */
 public class OrderRowMapper implements RowMapper<Order> {
 
   @Autowired

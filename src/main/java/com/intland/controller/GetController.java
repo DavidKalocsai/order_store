@@ -29,6 +29,7 @@ public class GetController extends ControllerExceptionHandler {
   @Autowired
   private ControllerInputValidator validator;
 
+
   /**
    * Get an order based on OrderId (oder id + group name).
    *
@@ -40,6 +41,7 @@ public class GetController extends ControllerExceptionHandler {
   public @ResponseBody OrderDbObj getOrder(@Valid @RequestBody OrderId id,
       final BindingResult bindingResult) {
     LOG.info("Get order called: {}", id);
+    validator.validateInput(bindingResult);
     return orderService.getOrder(id).orElse(null);
   }
 

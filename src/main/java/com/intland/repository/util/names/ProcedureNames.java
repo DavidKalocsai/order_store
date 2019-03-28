@@ -1,5 +1,8 @@
 package com.intland.repository.util.names;
 
+/**
+ * Domain object to store names of procedures.
+ */
 public class ProcedureNames {
   private static final String RESULT_SET_KEY = "orders";
   private static final String ADD_ORDER = "add_order";

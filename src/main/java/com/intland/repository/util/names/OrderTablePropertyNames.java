@@ -1,5 +1,8 @@
 package com.intland.repository.util.names;
 
+/**
+ * Domain object to store names of order table properties.
+ */
 public class OrderTablePropertyNames {
   private static final String TABLE_NAME = "order_table";
   private static final String ID = "order_id";

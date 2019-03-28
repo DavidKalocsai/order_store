@@ -4,9 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
+/**
+ * Implementation to cast object to T typed list.
+ */
 @Service("typeSafeListCaster")
 public class TypeSafeListCasterImpl implements TypeSafeListCaster {
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public <T> List<T> castList(Object obj, Class<T> clazz) {
     List<T> result = new ArrayList<>();

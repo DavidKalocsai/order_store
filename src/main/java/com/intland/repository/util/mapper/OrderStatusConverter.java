@@ -9,7 +9,7 @@ import com.intland.model.OrderStatus;
 @Service
 public class OrderStatusConverter implements Converter<String, OrderStatus> {
 
-  /*
+  /**
    * {@inheritDoc}
    */
   @Override

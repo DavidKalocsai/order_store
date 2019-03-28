@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.intland.model.OrderDbObj;
 import com.intland.service.OrderService;
+import com.intland.service.validation.input.ControllerInputValidator;
 
 /**
  * Controller handles order delete requests.
@@ -22,6 +23,9 @@ public class DeleteController extends ControllerExceptionHandler {
 
   @Autowired
   private OrderService orderService;
+
+  @Autowired
+  private ControllerInputValidator validator;
 
   /**
    * Delete an order from the database. It does not delete a request, it just set it to inactive.
@@ -35,7 +39,8 @@ public class DeleteController extends ControllerExceptionHandler {
   public @ResponseBody OrderDbObj delete(@Valid @RequestBody OrderDbObj order,
       final BindingResult bindingResult) {
     LOG.info("Delete called: {}", order);
-    return orderService.deleteOrder(order).orElse(null);
+    validator.validateInput(bindingResult);
+    return orderService.deleteOrder(order);
   }
 
 }

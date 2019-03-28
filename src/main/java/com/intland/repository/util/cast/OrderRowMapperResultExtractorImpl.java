@@ -8,19 +8,27 @@ import org.springframework.stereotype.Service;
 import com.intland.model.OrderDbObj;
 import com.intland.repository.util.names.ProcedureNames;
 
+/**
+ * Convert the output of the rowmapper to OrderDbObj.
+ */
 @Service("orderRowMapperResultExtractor")
 public class OrderRowMapperResultExtractorImpl implements OrderRowMapperResultExtractor {
 
   @Autowired
   private TypeSafeListCaster typeSafeListCaster;
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public Optional<OrderDbObj> extractOrder(Map<String, Object> rowMappedResult) {
     final List<OrderDbObj> orders = extractOrders(rowMappedResult);
     return orders.isEmpty() ? Optional.ofNullable(null) : Optional.of(orders.get(0));
   }
 
-
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public List<OrderDbObj> extractOrders(final Map<String, Object> rowMappedResult) {
     return typeSafeListCaster.castList(rowMappedResult.get(ProcedureNames.getResultSetKey()),

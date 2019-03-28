@@ -16,6 +16,9 @@ import com.intland.repository.util.procedure.OrderProcedureParameterBuilder;
 import com.intland.repository.util.procedure.SimpleJdbcCreator;
 import com.intland.repository.validate.ProcedureResultValidator;
 
+/**
+ * Order repository.
+ */
 @Transactional
 @Repository("orderRepository")
 public class OrderRepositoryImpl implements OrderRepository {
@@ -32,13 +35,18 @@ public class OrderRepositoryImpl implements OrderRepository {
   @Autowired
   private ProcedureResultValidator resultValidator;
 
-
+  /**
+   * {@inheritDoc}
+   */
   @Override
-  public Optional<OrderDbObj> addOrder(final Order order) {
+  public OrderDbObj addOrder(final Order order) {
     return processModification(ProcedureNames.getAddOrder(),
         parameterBuilder.getAddParameters(order));
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public Optional<OrderDbObj> getOrder(final OrderId id) {
     final SimpleJdbcCall simpleJdbcCall =
@@ -47,6 +55,9 @@ public class OrderRepositoryImpl implements OrderRepository {
         .extractOrder(simpleJdbcCall.execute(parameterBuilder.getGetParameters(id)));
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public List<OrderDbObj> getOrders() {
     final SimpleJdbcCall simpleJdbcCall =
@@ -54,19 +65,25 @@ public class OrderRepositoryImpl implements OrderRepository {
     return rowMapperResultExtractor.extractOrders(simpleJdbcCall.execute());
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
-  public Optional<OrderDbObj> updateOrder(final OrderDbObj order) {
+  public OrderDbObj updateOrder(final OrderDbObj order) {
     return processModification(ProcedureNames.getUpdateOrder(),
         parameterBuilder.getUpdateParameters(order));
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
-  public Optional<OrderDbObj> deleteOrder(final OrderDbObj order) {
+  public OrderDbObj deleteOrder(final OrderDbObj order) {
     return processModification(ProcedureNames.getDeleteOrder(),
         parameterBuilder.getDeleteParameters(order));
   }
 
-  private Optional<OrderDbObj> processModification(final String procedureName,
+  private OrderDbObj processModification(final String procedureName,
       final SqlParameterSource paramters) {
     final SimpleJdbcCall simpleJdbcCall = simpleJdbcCreator.createSimpleJdbc(procedureName);
     final Optional<OrderDbObj> orderOptional =
