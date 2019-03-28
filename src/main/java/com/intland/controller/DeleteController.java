@@ -9,7 +9,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
-import com.intland.controller.util.validation.ControllerInputValidator;
 import com.intland.model.OrderDbObj;
 import com.intland.service.OrderService;
 
@@ -24,9 +23,6 @@ public class DeleteController extends ControllerExceptionHandler {
   @Autowired
   private OrderService orderService;
 
-  @Autowired
-  private ControllerInputValidator validator;
-
   /**
    * Delete an order from the database. It does not delete a request, it just set it to inactive.
    *
@@ -39,7 +35,6 @@ public class DeleteController extends ControllerExceptionHandler {
   public @ResponseBody OrderDbObj delete(@Valid @RequestBody OrderDbObj order,
       final BindingResult bindingResult) {
     LOG.info("Delete called: {}", order);
-    validator.validateInput(bindingResult);
     return orderService.deleteOrder(order).orElse(null);
   }
 

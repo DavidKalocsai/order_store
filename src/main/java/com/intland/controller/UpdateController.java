@@ -9,7 +9,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
-import com.intland.controller.util.validation.ControllerInputValidator;
 import com.intland.model.OrderDbObj;
 import com.intland.service.OrderService;
 
@@ -24,9 +23,6 @@ public class UpdateController extends ControllerExceptionHandler {
   @Autowired
   private OrderService orderService;
 
-  @Autowired
-  private ControllerInputValidator validator;
-
   /**
    * Update order in database.
    *
@@ -39,7 +35,6 @@ public class UpdateController extends ControllerExceptionHandler {
   public @ResponseBody OrderDbObj updateOrder(@Valid @RequestBody OrderDbObj order,
       final BindingResult bindingResult) {
     LOG.info("Update order called: {}", order);
-    validator.validateInput(bindingResult);
     return orderService.updateOrder(order).orElse(null);
   }
 }

@@ -10,10 +10,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
-import com.intland.controller.util.validation.ControllerInputValidator;
 import com.intland.model.OrderDbObj;
 import com.intland.model.OrderId;
 import com.intland.service.OrderService;
+import com.intland.service.validation.input.ControllerInputValidator;
 
 /**
  * Controller handles get one specific order or all.
@@ -40,7 +40,6 @@ public class GetController extends ControllerExceptionHandler {
   public @ResponseBody OrderDbObj getOrder(@Valid @RequestBody OrderId id,
       final BindingResult bindingResult) {
     LOG.info("Get order called: {}", id);
-    validator.validateInput(bindingResult);
     return orderService.getOrder(id).orElse(null);
   }
 
