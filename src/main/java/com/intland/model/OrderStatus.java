@@ -19,9 +19,19 @@ public enum OrderStatus {
     this.description = description;
   }
 
+  public static OrderStatus getEnumFromCode(final String code) {
+    OrderStatus orderStatus = null;
+    for (final OrderStatus o : OrderStatus.values()) {
+      if (orderStatus == null && o.getCode().equals(code)) {
+        orderStatus = o;
+      }
+    }
+    return orderStatus;
+  }
+
   @Override
   public String toString() {
-    return MoreObjects.toStringHelper(this).add("DescriptiOn", description).toString();
+    return MoreObjects.toStringHelper(this).add("Description", description).toString();
   }
 
 }

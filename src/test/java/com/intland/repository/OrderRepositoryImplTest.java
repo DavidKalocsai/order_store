@@ -48,7 +48,7 @@ public class OrderRepositoryImplTest {
   public void addOrderShouldReturnThePassedInOrderWithOrderId() {
     final Order order = createAddOrder();
 
-    final OrderDbObj retOrder = orderRepository.addOrder(order).get();
+    final OrderDbObj retOrder = orderRepository.addOrder(order);
 
     validateOrder(order, retOrder);
     Assert.assertThat(1, is(equalTo(retOrder.getId())));
@@ -59,7 +59,7 @@ public class OrderRepositoryImplTest {
   public void getOrderShouldReturnNewlyAddedOrder() {
     final Order order = createAddOrder();
 
-    final OrderDbObj expectedOrder = orderRepository.addOrder(order).get();
+    final OrderDbObj expectedOrder = orderRepository.addOrder(order);
     final OrderId orderId = createOrderId(expectedOrder);
     final OrderDbObj actualOrder = orderRepository.getOrder(orderId).get();
 
@@ -72,8 +72,8 @@ public class OrderRepositoryImplTest {
   public void updateShouldUpdateNewlyAddedOrder() {
     final Order order = createAddOrder();
 
-    final OrderDbObj expectedOrder = orderRepository.addOrder(order).get();
-    final OrderDbObj actualOrder = orderRepository.updateOrder(expectedOrder).get();
+    final OrderDbObj expectedOrder = orderRepository.addOrder(order);
+    final OrderDbObj actualOrder = orderRepository.updateOrder(expectedOrder);
 
     validateOrder(expectedOrder, actualOrder);
     Assert.assertThat(1, is(equalTo(actualOrder.getId())));
