@@ -7,6 +7,10 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * Basic order object. It represents one simple order, no DB dependent information is stored.
+ * 
+ */
 @Getter
 @Setter
 @ToString(includeFieldNames = true)

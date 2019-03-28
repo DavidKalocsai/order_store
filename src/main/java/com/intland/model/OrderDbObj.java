@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * Basic order object extended with DB dependent fields: id, version.
+ */
 @Getter
 @Setter
 @ToString(callSuper = true, includeFieldNames = true)

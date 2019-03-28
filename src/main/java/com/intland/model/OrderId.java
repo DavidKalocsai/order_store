@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * OrderId is used to identify an order in the database.
+ */
 @Getter
 @Setter
 @ToString(includeFieldNames = true)
