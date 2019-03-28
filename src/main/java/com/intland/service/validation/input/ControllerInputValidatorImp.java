@@ -1,4 +1,4 @@
-package com.intland.controller.util.validation;
+package com.intland.service.validation.input;
 
 import javax.validation.ValidationException;
 import org.apache.logging.log4j.LogManager;
@@ -7,11 +7,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
+/*
+ * ControllerInputValidatorImp acts on input validation errors.
+ */
 @Service
 public class ControllerInputValidatorImp implements ControllerInputValidator {
 
   private static final Logger LOG = LogManager.getLogger(ControllerInputValidatorImp.class);
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public void validateInput(final BindingResult bindingResult) {
     if (bindingResult.hasErrors()) {
