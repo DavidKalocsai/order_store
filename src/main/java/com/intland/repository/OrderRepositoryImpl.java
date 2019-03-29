@@ -20,7 +20,7 @@ import com.intland.repository.validate.ProcedureResultValidator;
 /**
  * Order repository.
  */
-@Transactional(isolation = Isolation.READ_COMMITTED)
+@Transactional(isolation = Isolation.SERIALIZABLE)
 @Repository("orderRepository")
 public class OrderRepositoryImpl implements OrderRepository {
 
