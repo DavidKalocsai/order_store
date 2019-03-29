@@ -41,7 +41,7 @@ public class ControllerInputValidatorImp implements ControllerInputValidator {
 
   private void notifyClient(final StringBuilder stringBuilder) {
     final String errorMsg = stringBuilder.toString();
-    LOG.warn(errorMsg);
+    LOG.error(errorMsg);
     throw new ValidationException(errorMsg);
   }
 }

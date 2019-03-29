@@ -10,7 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
-import com.intland.model.OrderDbObj;
+import com.intland.model.OrderDatabaseObj;
 import com.intland.model.OrderId;
 import com.intland.service.OrderService;
 import com.intland.service.validation.input.ControllerInputValidator;
@@ -38,7 +38,7 @@ public class GetController extends ControllerExceptionHandler {
    * @return Return the requested order if found, else null.
    */
   @GetMapping(value = "/order")
-  public @ResponseBody OrderDbObj getOrder(@Valid @RequestBody OrderId id,
+  public @ResponseBody OrderDatabaseObj getOrder(@Valid @RequestBody OrderId id,
       final BindingResult bindingResult) {
     LOG.info("Get order called: {}", id);
     validator.validateInput(bindingResult);
@@ -51,7 +51,7 @@ public class GetController extends ControllerExceptionHandler {
    * @return Returns all orders if found any, else empty list.
    */
   @GetMapping(value = "/orders")
-  public @ResponseBody List<OrderDbObj> getOrders() {
+  public @ResponseBody List<OrderDatabaseObj> getOrders() {
     LOG.info("Get orders called");
     return orderService.getOrders();
   }

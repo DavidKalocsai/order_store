@@ -25,15 +25,28 @@ CREATE TABLE IF NOT EXISTS order_schema.group_table (
 -- Table - Order
 -- ---------------------------
 CREATE TABLE order_schema.order_table (
-	order_id INT NOT NULL DEFAULT 1,
+	order_id INT NOT NULL AUTO_INCREMENT,
+	group_order_id INT NOT NULL DEFAULT 1,
     group_id INT NOT NULL,
     order_date DATE NOT NULL,
     order_desc VARCHAR(200) NOT NULL,
     order_status VARCHAR(50) NOT NULL,
     order_version INT NOT NULL DEFAULT 1,
-    PRIMARY KEY (order_id, group_id),
+    PRIMARY KEY (order_id),
     FOREIGN KEY (group_id) REFERENCES order_schema.group_table(group_id)
 );
+
+CREATE UNIQUE INDEX group_table_pk_index
+ON order_schema.group_table (group_id);
+
+CREATE UNIQUE INDEX group_table_u_index
+ON order_schema.group_table (group_name);
+
+CREATE UNIQUE INDEX order_table_pk_index
+ON order_schema.order_table (group_order_id, group_id);
+
+CREATE INDEX order_table_fk_index
+ON order_schema.order_table (group_id);
 
 -- ---------------------------
 -- Functions - get number of rows belonging to a given group_id 
@@ -44,13 +57,13 @@ CREATE FUNCTION order_schema.group_count(group_id INT)
 RETURNS INT READS SQL DATA
 BEGIN
 	DECLARE group_count INT;
-    SET group_count = (SELECT MAX(order_id) FROM order_schema.order_table WHERE order_schema.order_table.group_id = group_id);
+    SET group_count = (SELECT MAX(group_order_id) FROM order_schema.order_table WHERE order_schema.order_table.group_id = group_id);
     IF (group_count IS NULL) THEN SET group_count = 0; END IF;
 	RETURN (group_count);
 END$$
 DELIMITER ;
 
--- SELECT order_schema.group_count('2');
+-- SELECT order_schema.group_count('1001');
 
 -- ---------------------------
 -- Functions - get group id belonging to given group name
@@ -66,7 +79,7 @@ BEGIN
 END$$
 DELIMITER ;
 
--- SELECT order_schema.get_group_id('Group 1')
+-- SELECT order_schema.get_group_id('Test Group 1')
 -- ---------------------------
 -- Functions - get next group id
 -- ---------------------------
@@ -76,7 +89,7 @@ CREATE FUNCTION order_schema.get_next_group_id()
 RETURNS INT READS SQL DATA
 BEGIN
 	DECLARE l_group_id INT;
-    SET l_group_id = (SELECT MAX(group_id) FROM order_schema.group_table g FOR UPDATE);
+    SET l_group_id = (SELECT MAX(group_id) FROM order_schema.group_table g /*FOR UPDATE*/);
     IF (l_group_id IS NULL) THEN SET l_group_id = 0; END IF;   
     RETURN (l_group_id + 1);
 END$$
@@ -90,16 +103,15 @@ DROP FUNCTION IF EXISTS order_schema.get_next_version_id;
 DELIMITER $$
 CREATE FUNCTION order_schema.get_next_version_id(
 	i_order_id INT,
-    i_group_id INT,
     i_version INT
 )
 RETURNS INT READS SQL DATA
 BEGIN
 	DECLARE l_version INT;
     DECLARE ret_valid INT;
-    SET l_version = (SELECT order_version FROM order_schema.order_table o WHERE o.order_id = i_order_id AND o.group_id = i_group_id FOR UPDATE);
+    SET l_version = (SELECT order_version FROM order_schema.order_table o WHERE o.order_id = i_order_id /*FOR UPDATE*/);
     if (i_version = l_version) THEN
-		SET ret_valid = l_version + 1;
+		SET ret_valid = l_version + 1; -- <---- rethink if it is really required
     ELSE
 		SET ret_valid = -1; 
     END IF;
@@ -107,23 +119,25 @@ BEGIN
 END$$
 DELIMITER ;
 
--- SELECT order_schema.get_next_version_id(1, 1, 1);
+-- SELECT order_schema.get_next_version_id(1, 1);
 
 -- ---------------------------
 -- Function - Calculate order id before insert
 -- ---------------------------
-DROP FUNCTION IF EXISTS order_schema.order_id_generation;
+DROP FUNCTION IF EXISTS order_schema.group_order_id_generation;
 DELIMITER $$
-CREATE FUNCTION order_schema.order_id_generation (
+CREATE FUNCTION order_schema.group_order_id_generation (
 	group_id INT
 )
 RETURNS INT READS SQL DATA
 BEGIN
-	DECLARE l_order_id INT;
-    SET l_order_id = order_schema.group_count(group_id) + 1;
-    RETURN (l_order_id);
+	DECLARE l_group_order_id INT;
+    SET l_group_order_id = order_schema.group_count(group_id) + 1;
+    RETURN (l_group_order_id);
 END $$
 DELIMITER ;
+
+-- SELECT order_schema.group_order_id_generation('1001');
 
 -- ---------------------------
 -- View - Merged Order - Group 
@@ -131,10 +145,11 @@ DELIMITER ;
 DROP VIEW IF EXISTS order_schema.order_view;
 CREATE VIEW order_schema.order_view
 AS
-	SELECT o.order_id, o.group_id, g.group_name, o.order_date, o.order_desc, o.order_status, o.order_version   
+	SELECT o.order_id, o.group_order_id, o.group_id, g.group_name, o.order_date, o.order_desc, o.order_status, o.order_version   
 	FROM order_schema.order_table o
 	LEFT JOIN order_schema.group_table g on g.group_id = o.group_id;
 
+-- SELECT * FROM order_schema.order_view
 -- ---------------------------
 -- Procedure - add order
 -- ---------------------------
@@ -147,20 +162,25 @@ CREATE PROCEDURE order_schema.add_order(
     IN i_order_status VARCHAR(50)
 )
 BEGIN
+	DECLARE l_id INT;
 	DECLARE l_group_id INT;
-	DECLARE l_new_order_id INT;
+	DECLARE l_new_group_order_id INT;
     SET l_group_id = order_schema.get_group_id(i_group_name);
     IF (l_group_id IS NULL) THEN
 		SET l_group_id = order_schema.get_next_group_id();
 		INSERT INTO order_schema.group_table(group_id, group_name)
 		VALUES(l_group_id, i_group_name);
     END IF;   
-    SET l_new_order_id = order_id_generation(l_group_id);
-    INSERT INTO order_schema.order_table(order_id, group_id, order_date, order_desc, order_status)
-    VALUES(l_new_order_id, l_group_id, i_order_date, i_order_desc, i_order_status);
-    CALL order_schema.get_order(l_new_order_id, i_group_name);
+    SET l_new_group_order_id = group_order_id_generation(l_group_id);
+    INSERT INTO order_schema.order_table(group_order_id, group_id, order_date, order_desc, order_status)
+    VALUES(l_new_group_order_id, l_group_id, i_order_date, i_order_desc, i_order_status);
+    SET l_id = (SELECT v.order_id FROM order_schema.order_view v WHERE v.group_order_id = l_new_group_order_id AND v.group_name = i_group_name);
+    CALL order_schema.get_order(l_id);
 END $$
 DELIMITER ;
+
+-- CALL order_schema.add_order('Group 3', '2020-12-24', '1,3', 'active');
+-- SELECT * FROM order_schema.order_view v;
 
 GRANT EXECUTE ON PROCEDURE order_schema.add_order TO 'app'@'localhost';
 GRANT EXECUTE ON PROCEDURE order_schema.add_order TO 'test'@'localhost';
@@ -171,13 +191,15 @@ GRANT EXECUTE ON PROCEDURE order_schema.add_order TO 'test'@'localhost';
 DROP PROCEDURE IF EXISTS order_schema.get_order;
 DELIMITER $$
 CREATE PROCEDURE order_schema.get_order(
-	IN i_order_id INT,
-    IN i_group_name VARCHAR(100)
+	IN i_order_id INT
 )
 BEGIN
-	SELECT d.order_id, d.group_name, d.order_date, d.order_desc, d.order_status, d.order_version FROM order_schema.order_view d WHERE d.order_id = i_order_id AND d.group_name = i_group_name;
+	SELECT v.order_id, v.group_order_id, v.group_name, v.order_date, v.order_desc, v.order_status, v.order_version FROM order_schema.order_view v WHERE v.order_id = i_order_id;
 END $$
 DELIMITER ;
+
+-- CALL order_schema.get_order(1);
+-- SELECT * FROM order_schema.order_view v;
 
 GRANT EXECUTE ON PROCEDURE order_schema.get_order TO 'app'@'localhost';
 GRANT EXECUTE ON PROCEDURE order_schema.get_order TO 'test'@'localhost';
@@ -189,9 +211,12 @@ DROP PROCEDURE IF EXISTS order_schema.get_orders;
 DELIMITER $$
 CREATE PROCEDURE order_schema.get_orders()
 BEGIN
-	SELECT d.order_id, d.group_name, d.order_date, d.order_desc, d.order_status, d.order_version FROM order_schema.order_view d;
+	SELECT v.order_id, v.group_order_id, v.group_name, v.order_date, v.order_desc, v.order_status, v.order_version FROM order_schema.order_view v;
 END $$
 DELIMITER ;
+
+-- CALL order_schema.get_orders();
+-- SELECT * FROM order_schema.order_view v;
 
 GRANT EXECUTE ON PROCEDURE order_schema.get_orders TO 'app'@'localhost';
 GRANT EXECUTE ON PROCEDURE order_schema.get_orders TO 'test'@'localhost';
@@ -202,23 +227,23 @@ DROP PROCEDURE IF EXISTS order_schema.update_order;
 DELIMITER $$
 CREATE PROCEDURE order_schema.update_order(
 	IN i_order_id INT,
-    IN i_group_name VARCHAR(100),
-    IN i_order_date DATE,
+	IN i_order_date DATE,
     IN i_order_desc VARCHAR(200),
     IN i_order_status VARCHAR(50),
     IN i_order_version INT
 )
 BEGIN
-	DECLARE l_group_id INT;
-    DECLARE l_next_version_id INT;
-    SET l_group_id = order_schema.get_group_id(i_group_name);
-    SET l_next_version_id = order_schema.get_next_version_id(i_order_id, l_group_id, i_order_version);
-    IF (l_group_id IS NOT NULL AND l_next_version_id > 0) THEN
-		UPDATE order_schema.order_table o SET o.order_date = i_order_date, o.order_desc = i_order_desc, o.order_status = i_order_status, o.order_version = l_next_version_id WHERE o.order_id = i_order_id AND o.group_id = l_group_id;
-        CALL order_schema.get_order(i_order_id, i_group_name);
+	DECLARE l_next_version_id INT;
+    SET l_next_version_id = order_schema.get_next_version_id(i_order_id, i_order_version);
+    IF (l_next_version_id > 0) THEN
+		UPDATE order_schema.order_table o SET o.order_date = i_order_date, o.order_desc = i_order_desc, o.order_status = i_order_status, o.order_version = l_next_version_id WHERE o.order_id = i_order_id;
+        CALL order_schema.get_order(i_order_id);
     END IF;    
 END $$
 DELIMITER ;
+
+-- CALL order_schema.update_order(1, '2019-11-11', 'Desc', 'active2', 1);
+-- SELECT * FROM order_schema.order_view v;
 
 GRANT EXECUTE ON PROCEDURE order_schema.update_order TO 'app'@'localhost';
 GRANT EXECUTE ON PROCEDURE order_schema.update_order TO 'test'@'localhost';
@@ -228,23 +253,25 @@ GRANT EXECUTE ON PROCEDURE order_schema.update_order TO 'test'@'localhost';
 DROP PROCEDURE IF EXISTS order_schema.delete_order;
 DELIMITER $$
 CREATE PROCEDURE order_schema.delete_order(
-	IN i_order_id INT,
-    IN i_group_name VARCHAR(100), 
+	IN i_order_id INT, 
     IN i_order_version INT
 )
 BEGIN
-	DECLARE l_group_id INT;
-    DECLARE l_next_version_id INT;
-    SET l_group_id = order_schema.get_group_id(i_group_name);
-    SET l_next_version_id = order_schema.get_next_version_id(i_order_id, l_group_id, i_order_version);
-    IF (l_group_id IS NOT NULL AND l_next_version_id > 0) THEN
-		UPDATE order_schema.order_table o SET o.order_status = 'deleted', o.order_version = l_next_version_id WHERE o.order_id = i_order_id AND o.group_id = l_group_id;
-        CALL order_schema.get_order(i_order_id, i_group_name);
+	DECLARE l_next_version_id INT;
+    SET l_next_version_id = order_schema.get_next_version_id(i_order_id, i_order_version);
+    IF (l_next_version_id > 0) THEN
+		UPDATE order_schema.order_table o SET o.order_status = 'deleted', o.order_version = l_next_version_id WHERE o.order_id = i_order_id;
+        CALL order_schema.get_order(i_order_id);
 	END IF;
 END $$
 DELIMITER ;
 
+-- CALL order_schema.delete_order(1,2);
+
+
 GRANT EXECUTE ON PROCEDURE order_schema.delete_order TO 'app'@'localhost';
 GRANT EXECUTE ON PROCEDURE order_schema.delete_order TO 'test'@'localhost';
 
-SELECT g.group_id FROM order_schema.group_table g WHERE g.group_name = 'name';
+COMMIT;
+
+SELECT * FROM order_schema.order_view; 

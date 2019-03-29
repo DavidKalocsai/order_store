@@ -3,7 +3,7 @@ package com.intland.repository.util.procedure;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import com.intland.model.Order;
 import com.intland.model.OrderId;
-import com.intland.model.OrderDbObj;
+import com.intland.model.OrderDatabaseObj;
 
 
 public interface OrderProcedureParameterBuilder {
@@ -12,8 +12,8 @@ public interface OrderProcedureParameterBuilder {
 
   SqlParameterSource getGetParameters(OrderId id);
 
-  SqlParameterSource getUpdateParameters(OrderDbObj order);
+  SqlParameterSource getUpdateParameters(OrderDatabaseObj order);
 
-  SqlParameterSource getDeleteParameters(OrderDbObj order);
+  SqlParameterSource getDeleteParameters(OrderDatabaseObj order);
 
 }

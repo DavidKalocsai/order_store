@@ -6,6 +6,7 @@ package com.intland.repository.util.names;
 public class OrderTablePropertyNames {
   private static final String TABLE_NAME = "order_table";
   private static final String ID = "order_id";
+  private static final String GROUP_ORDER_ID = "group_order_id";
   private static final String GROUP_ID = "group_id";
   private static final String ORDER_DATE = "order_date";
   private static final String ORDER_DESC = "order_desc";
@@ -22,6 +23,10 @@ public class OrderTablePropertyNames {
 
   public static String getId() {
     return ID;
+  }
+
+  public static String getGroupOrderId() {
+    return GROUP_ORDER_ID;
   }
 
   public static String getGroupId() {

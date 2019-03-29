@@ -3,7 +3,7 @@ package com.intland.service;
 import java.util.List;
 import java.util.Optional;
 import com.intland.model.Order;
-import com.intland.model.OrderDbObj;
+import com.intland.model.OrderDatabaseObj;
 import com.intland.model.OrderId;
 
 /**
@@ -15,38 +15,38 @@ public interface OrderService {
    * Add order.
    *
    * @param order {@link Order}
-   * @return {@link OrderDbObj}
+   * @return {@link OrderDatabaseObj}
    */
-  OrderDbObj addOrder(Order order);
+  OrderDatabaseObj addOrder(Order order);
 
   /**
    * Get orders.
    *
-   * @return list of {@link OrderDbObj}
+   * @return list of {@link OrderDatabaseObj}
    */
-  List<OrderDbObj> getOrders();
+  List<OrderDatabaseObj> getOrders();
 
   /**
    * Add order.
    *
    * @param id {@link Order}
-   * @return {@link OrderDbObj}
+   * @return {@link OrderDatabaseObj}
    */
-  Optional<OrderDbObj> getOrder(OrderId id);
+  Optional<OrderDatabaseObj> getOrder(OrderId id);
 
   /**
    * Update order.
    *
-   * @param order {@link OrderDbObj}
-   * @return {@link OrderDbObj}
+   * @param order {@link OrderDatabaseObj}
+   * @return {@link OrderDatabaseObj}
    */
-  OrderDbObj updateOrder(OrderDbObj order);
+  OrderDatabaseObj updateOrder(OrderDatabaseObj order);
 
   /**
    * Delete order.
    *
-   * @param order {@link OrderDbObj}
-   * @return {@link OrderDbObj}
+   * @param order {@link OrderDatabaseObj}
+   * @return {@link OrderDatabaseObj}
    */
-  OrderDbObj deleteOrder(OrderDbObj order);
+  OrderDatabaseObj deleteOrder(OrderDatabaseObj order);
 }

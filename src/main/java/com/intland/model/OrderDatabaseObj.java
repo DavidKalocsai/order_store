@@ -12,11 +12,14 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString(callSuper = true, includeFieldNames = true)
-public class OrderDbObj extends Order {
-
+public class OrderDatabaseObj extends Order {
   @NotNull(message = "{orderdb.id.invalid}")
   @Min(value = 1, message = "{orderdb.id.invalid}")
   private Integer id;
+
+  @NotNull(message = "{orderdb.group.order.id.invalid}")
+  @Min(value = 1, message = "{orderdb.group.order.id.invalid}")
+  private Integer groupOrderId;
 
   @NotNull(message = "{orderdb.version.invalid}")
   @Min(value = 1, message = "{orderdb.version.invalid}")

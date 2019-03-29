@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.intland.model.OrderDbObj;
+import com.intland.model.OrderDatabaseObj;
 import com.intland.repository.util.names.ProcedureNames;
 
 /**
@@ -21,8 +21,8 @@ public class OrderRowMapperResultExtractorImpl implements OrderRowMapperResultEx
    * {@inheritDoc}
    */
   @Override
-  public Optional<OrderDbObj> extractOrder(Map<String, Object> rowMappedResult) {
-    final List<OrderDbObj> orders = extractOrders(rowMappedResult);
+  public Optional<OrderDatabaseObj> extractOrder(Map<String, Object> rowMappedResult) {
+    final List<OrderDatabaseObj> orders = extractOrders(rowMappedResult);
     return orders.isEmpty() ? Optional.ofNullable(null) : Optional.of(orders.get(0));
   }
 
@@ -30,9 +30,9 @@ public class OrderRowMapperResultExtractorImpl implements OrderRowMapperResultEx
    * {@inheritDoc}
    */
   @Override
-  public List<OrderDbObj> extractOrders(final Map<String, Object> rowMappedResult) {
+  public List<OrderDatabaseObj> extractOrders(final Map<String, Object> rowMappedResult) {
     return typeSafeListCaster.castList(rowMappedResult.get(ProcedureNames.getResultSetKey()),
-        OrderDbObj.class);
+        OrderDatabaseObj.class);
   }
 
 

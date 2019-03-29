@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.intland.model.Order;
-import com.intland.model.OrderDbObj;
+import com.intland.model.OrderDatabaseObj;
 import com.intland.model.OrderId;
 import com.intland.repository.OrderRepository;
 
@@ -22,7 +22,7 @@ public class OrderServiceImpl implements OrderService {
    * {@inheritDoc}
    */
   @Override
-  public OrderDbObj addOrder(Order order) {
+  public OrderDatabaseObj addOrder(Order order) {
     return orderRepository.addOrder(order);
   }
 
@@ -30,7 +30,7 @@ public class OrderServiceImpl implements OrderService {
    * {@inheritDoc}
    */
   @Override
-  public Optional<OrderDbObj> getOrder(OrderId id) {
+  public Optional<OrderDatabaseObj> getOrder(OrderId id) {
     return orderRepository.getOrder(id);
   }
 
@@ -38,7 +38,7 @@ public class OrderServiceImpl implements OrderService {
    * {@inheritDoc}
    */
   @Override
-  public List<OrderDbObj> getOrders() {
+  public List<OrderDatabaseObj> getOrders() {
     return orderRepository.getOrders();
   }
 
@@ -46,7 +46,7 @@ public class OrderServiceImpl implements OrderService {
    * {@inheritDoc}
    */
   @Override
-  public OrderDbObj updateOrder(OrderDbObj order) {
+  public OrderDatabaseObj updateOrder(OrderDatabaseObj order) {
     return orderRepository.updateOrder(order);
   }
 
@@ -54,7 +54,7 @@ public class OrderServiceImpl implements OrderService {
    * {@inheritDoc}
    */
   @Override
-  public OrderDbObj deleteOrder(OrderDbObj order) {
+  public OrderDatabaseObj deleteOrder(OrderDatabaseObj order) {
     return orderRepository.deleteOrder(order);
   }
 }

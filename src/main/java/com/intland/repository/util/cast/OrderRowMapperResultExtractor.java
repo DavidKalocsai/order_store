@@ -3,7 +3,7 @@ package com.intland.repository.util.cast;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import com.intland.model.OrderDbObj;
+import com.intland.model.OrderDatabaseObj;
 
 /**
  * Convert the output of the rowmapper to OrderDbObj.
@@ -11,19 +11,19 @@ import com.intland.model.OrderDbObj;
 public interface OrderRowMapperResultExtractor {
 
   /**
-   * Convert object to {@link OrderDbObj} optional.
+   * Convert object to {@link OrderDatabaseObj} optional.
    *
    * @param rowMappedResult output of rowmmapper.
-   * @return {@link OrderDbObj} optional,
+   * @return {@link OrderDatabaseObj} optional,
    */
-  Optional<OrderDbObj> extractOrder(Map<String, Object> rowMappedResult);
+  Optional<OrderDatabaseObj> extractOrder(Map<String, Object> rowMappedResult);
 
   /**
-   * Convert object to {@link OrderDbObj} optional of list.
+   * Convert object to {@link OrderDatabaseObj} optional of list.
    *
    * @param rowMappedResult output of rowmmapper.
-   * @return {@link OrderDbObj} optional of list,
+   * @return {@link OrderDatabaseObj} optional of list,
    */
-  List<OrderDbObj> extractOrders(Map<String, Object> rowMappedResult);
+  List<OrderDatabaseObj> extractOrders(Map<String, Object> rowMappedResult);
 
 }

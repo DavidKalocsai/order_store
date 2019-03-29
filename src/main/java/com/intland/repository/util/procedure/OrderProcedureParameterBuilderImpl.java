@@ -4,8 +4,8 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Service;
 import com.intland.model.Order;
+import com.intland.model.OrderDatabaseObj;
 import com.intland.model.OrderId;
-import com.intland.model.OrderDbObj;
 import com.intland.repository.util.names.GroupTablePropertyNames;
 import com.intland.repository.util.names.OrderTablePropertyNames;
 import com.intland.repository.util.names.ProcedureNames;
@@ -29,17 +29,13 @@ public class OrderProcedureParameterBuilderImpl implements OrderProcedureParamet
   @Override
   public SqlParameterSource getGetParameters(final OrderId id) {
     return new MapSqlParameterSource()
-        .addValue(ProcedureNames.getInputParameter(OrderTablePropertyNames.getId()), id.getId())
-        .addValue(ProcedureNames.getInputParameter(GroupTablePropertyNames.getGroupName()),
-            id.getGroup());
+        .addValue(ProcedureNames.getInputParameter(OrderTablePropertyNames.getId()), id.getId());
   }
 
   @Override
-  public SqlParameterSource getUpdateParameters(final OrderDbObj order) {
+  public SqlParameterSource getUpdateParameters(final OrderDatabaseObj order) {
     return new MapSqlParameterSource()
         .addValue(ProcedureNames.getInputParameter(OrderTablePropertyNames.getId()), order.getId())
-        .addValue(ProcedureNames.getInputParameter(GroupTablePropertyNames.getGroupName()),
-            order.getGroup())
         .addValue(ProcedureNames.getInputParameter(OrderTablePropertyNames.getOrderDate()),
             order.getDate())
         .addValue(ProcedureNames.getInputParameter(OrderTablePropertyNames.getOrderDesc()),
@@ -51,11 +47,9 @@ public class OrderProcedureParameterBuilderImpl implements OrderProcedureParamet
   }
 
   @Override
-  public SqlParameterSource getDeleteParameters(final OrderDbObj order) {
+  public SqlParameterSource getDeleteParameters(final OrderDatabaseObj order) {
     return new MapSqlParameterSource()
         .addValue(ProcedureNames.getInputParameter(OrderTablePropertyNames.getId()), order.getId())
-        .addValue(ProcedureNames.getInputParameter(GroupTablePropertyNames.getGroupName()),
-            order.getGroup())
         .addValue(ProcedureNames.getInputParameter(OrderTablePropertyNames.getOrderVersion()),
             order.getVersion());
   }

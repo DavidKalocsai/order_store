@@ -2,7 +2,7 @@ package com.intland.repository.validate;
 
 import java.util.Optional;
 import org.springframework.stereotype.Service;
-import com.intland.model.OrderDbObj;
+import com.intland.model.OrderDatabaseObj;
 import com.intland.repository.exception.SqlCommandResultException;
 
 /**
@@ -18,7 +18,7 @@ public class ProcedureResultValidatorImpl implements ProcedureResultValidator {
    * {@inheritDoc}
    */
   @Override
-  public OrderDbObj validate(final Optional<OrderDbObj> returnedOrder) {
+  public OrderDatabaseObj validate(final Optional<OrderDatabaseObj> returnedOrder) {
     if (!returnedOrder.isPresent()) {
       throw new SqlCommandResultException(RESULT_IS_NULL);
     }

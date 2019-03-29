@@ -9,7 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
-import com.intland.model.OrderDbObj;
+import com.intland.model.OrderDatabaseObj;
 import com.intland.service.OrderService;
 import com.intland.service.validation.input.ControllerInputValidator;
 
@@ -30,13 +30,13 @@ public class UpdateController extends ControllerExceptionHandler {
   /**
    * Update order in database.
    *
-   * @param order {@link OrderDbObj}.
+   * @param order {@link OrderDatabaseObj}.
    * @param bindingResult in case of validation issue, it stores the error results, messages.
    * @return After successful update, order will be updated with the new values. In case of failures
    *         base class {@link ControllerExceptionHandler} will generate the response.
    */
   @PutMapping(value = "/update")
-  public @ResponseBody OrderDbObj updateOrder(@Valid @RequestBody OrderDbObj order,
+  public @ResponseBody OrderDatabaseObj updateOrder(@Valid @RequestBody OrderDatabaseObj order,
       final BindingResult bindingResult) {
     LOG.info("Update order called: {}", order);
     validator.validateInput(bindingResult);
