@@ -16,9 +16,9 @@ USE order_schema;
 -- Table - Group
 -- ---------------------------
 CREATE TABLE IF NOT EXISTS order_schema.group_table (
-	group_id INT NOT NULL,
+	group_id INT NOT NULL AUTO_INCREMENT,
     group_name VARCHAR(100) NOT NULL UNIQUE,
-    group_member_count INT NOT NULL,
+    group_member_count INT NOT NULL DEFAULT 0,
     PRIMARY KEY (group_id)
 );
 
@@ -110,17 +110,19 @@ BEGIN
     DECLARE l_group_id INT;
     DECLARE l_member_count INT;
     SET l_group_id = (SELECT group_id FROM order_schema.group_table g WHERE g.group_name = i_group_name FOR UPDATE);
+    SET l_member_count = (SELECT group_member_count FROM order_schema.group_table g WHERE g.group_name = i_group_name);
     IF (l_group_id IS NULL) THEN
-		SET l_group_id = (SELECT MAX(group_id) FROM order_schema.group_table g FOR UPDATE);
-        IF (l_group_id IS NULL) THEN SET l_group_id = 0; END IF;
-        SET l_group_id = l_group_id + 1;
-		INSERT INTO order_schema.group_table(group_id, group_name, group_member_count)
-		VALUES(l_group_id, i_group_name, 0);
-    END IF;
-    SET l_member_count = (SELECT group_member_count FROM order_schema.group_table g WHERE g.group_id = l_group_id FOR UPDATE);
+		SET l_member_count = 0;
+		INSERT INTO order_schema.group_table(group_name)
+		VALUES(i_group_name);
+        SET l_group_id = (SELECT group_id FROM order_schema.group_table g WHERE g.group_name = i_group_name FOR UPDATE);
+        INSERT INTO order_schema.order_table(group_order_id, group_id, order_date, order_desc, order_status)
+		VALUES(l_member_count + 1, l_group_id, i_order_date, i_order_desc, i_order_status);
+	ELSE
 		INSERT INTO order_schema.order_table(group_order_id, group_id, order_date, order_desc, order_status)
 		VALUES(l_member_count + 1, l_group_id, i_order_date, i_order_desc, i_order_status);
-	UPDATE order_schema.group_table g SET g.group_member_count = l_member_count + 1 WHERE g.group_id = l_group_id;
+    END IF;
+    UPDATE order_schema.group_table g SET g.group_member_count = l_member_count + 1 WHERE g.group_id = l_group_id;
     SET l_id = (SELECT v.order_id FROM order_schema.order_view v WHERE v.group_order_id = l_member_count + 1 AND v.group_name = i_group_name);
     CALL order_schema.get_order(l_id);
 END $$
